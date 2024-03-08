@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafanaagent
+  name: grafanaagent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafanaagent
+  template:
+    metadata:
+      labels:
+        app: grafanaagent
+    spec:
+      containers:
+      - image: prom/prometheus
+        imagePullPolicy: Always
+        name: grafanaagent
+        volumeMounts:
+          - name: grafanaagent-config
+            mountPath: /etc/prometheus
+        resources:
+          requests:
+            memory: ".5Gi"
+            cpu: "500m"
+          limits:
+            memory: ".5Gi"
+            cpu: "500m"
+      volumes:
+        - name: grafanaagent-config
+          configMap:
+            name: grafanaagent-config
